@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Máquina de Busca</title>
+</head>
+<body>
+  <h1>Busca BBC News</h1>
+
+  <form method="post">
+    <input type="text" name="q" placeholder="Digite sua busca..." value="{{ query or '' }}">
+    <button type="submit">Buscar</button>
+  </form>
+
+  {% if results_on_page %}
+    <h2>Resultados para: "{{ query }}"</h2>
+    <ul>
+      {% for r in results_on_page %}
+        <li>
+          <strong>{{ r.title }}</strong><br>
+          <small>{{ r.snippet }}</small>
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% if page > 1 %}
+      <a href="{{ url_for('main.index', page=page-1) }}">Anterior</a>
+    {% endif %}
+
+    <span>Pagina {{page}} de {{total_pages}}</span>
+
+    {% if page < total_pages %}
+      <a href="{{ url_for('main.index', page=page+1) }}">Posterior</a>
+    {% endif %}
+
+  {% elif query %}
+    <p>Nenhum resultado encontrado para "{{ query }}"</p>
+  {% endif %}
+</body>
+</html>

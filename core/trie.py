@@ -1,0 +1,2 @@
+def Trie():
+	return
