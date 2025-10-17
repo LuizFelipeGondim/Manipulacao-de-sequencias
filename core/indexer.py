@@ -13,7 +13,7 @@ class IndiceInvertido:
 
         for palavra in lista_palavras:
             self.trie.inserirPalavra(palavra, self.arquivos_lidos)
-        
+ 
 
     def exibirDocumentos(self):
         print(self.documentos)

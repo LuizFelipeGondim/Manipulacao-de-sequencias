@@ -6,10 +6,15 @@ def normalizar(texto: str) -> str:
     texto = unicodedata.normalize("NFD", texto)
     texto = "".join(c for c in texto if unicodedata.category(c) != "Mn")
 
-    # torna maiúsculas
+    # torna minúsculas
     texto = texto.lower()
 
-    # Mantém apenas letras A–Z e espaços
-    texto = re.sub(r"[^a-z ]", "", texto)
+    # Mantém apenas letras a–z e espaços
+    texto = re.sub(r"[^a-z 0-9\n]", "", texto)
 
     return texto
+
+def verificarModelo(entrada: str) -> bool:
+    if (" ") in entrada:
+        print("Digite apenas uma palavra!")
+        return False

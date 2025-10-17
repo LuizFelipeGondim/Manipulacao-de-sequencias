@@ -2,7 +2,7 @@ class NoCompacto:
     def __init__(self):
         self.filhos={}
         self.fim = False
-        self.aparicoes=[]
+        self.aparicoes={}
 
 class TrieCompacta:
     def __init__(self):
@@ -41,14 +41,16 @@ class TrieCompacta:
                 novo_no = NoCompacto()
                 novo_no.fim_palavra = True
                 if numDocumento not in novo_no.aparicoes:
-                    novo_no.aparicoes.append(numDocumento)
+                    novo_no.aparicoes[numDocumento] = 1
+                else : novo_no.aparicoes[numDocumento] += 1
                 no.filhos[palavra] = novo_no
                 return
 
         # Marca o fim da palavra
         no.fim_palavra = True
         if numDocumento not in no.aparicoes:
-            no.aparicoes.append(numDocumento)
+            no.aparicoes[numDocumento] = 1
+        else : no.aparicoes[numDocumento] += 1
 
     def buscarPalavra(self, palavra):
         no = self.raiz
@@ -61,6 +63,7 @@ class TrieCompacta:
                     encontrado = True
                     break
             if not encontrado:
+                print('Essa palavra não tem em nenhum arquivo')
                 return False
         
         print(no.aparicoes)
