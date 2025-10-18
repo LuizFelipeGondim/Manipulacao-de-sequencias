@@ -3,7 +3,8 @@ from core import Indexer, Retriever
 
 def create_app():
     app = Flask(__name__)
-
+    app.secret_key = "chave-super-secreta-e-unica"
+    
     indexer = Indexer()
     retriever = Retriever()
 

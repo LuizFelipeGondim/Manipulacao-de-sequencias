@@ -1,26 +1,37 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Máquina de Busca</title>
-</head>
-<body>
-  <h1>Busca BBC News</h1>
+{% extends 'base.html' %}
+
+{% block title %}BBC News{% endblock %}
+
+{% block content %}
+  <h1 class="inter-semi-bold">Busca BBC News</h1>
 
   <form method="post">
     <input type="text" name="q" placeholder="Digite sua busca..." value="{{ query or '' }}">
     <button type="submit">Buscar</button>
   </form>
 
-  {% if results_on_page %}
+  {% if query %}
     <h2>Resultados para: "{{ query }}"</h2>
-    <ul>
+  {% endif %}
+
+  {% if results_on_page %}
+
+    <ul class="card-container">
+
       {% for r in results_on_page %}
-        <li>
+        <li class="card {{ r.category }}">
+
+          {% set icon = category_icons.get(r.category) %}
+
+          {% if icon %}
+            <img src="{{ url_for('static', filename=icon) }}" alt="{{ r.category }} icon" class="card-icon">
+          {% endif %}
+
           <strong>{{ r.title }}</strong><br>
           <small>{{ r.snippet }}</small>
         </li>
       {% endfor %}
+
     </ul>
 
     {% if page > 1 %}
@@ -36,5 +47,5 @@
   {% elif query %}
     <p>Nenhum resultado encontrado para "{{ query }}"</p>
   {% endif %}
-</body>
-</html>
+  
+{% endblock %}

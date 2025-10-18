@@ -1,0 +1,160 @@
+body {
+  background-color: #e5e7eb;
+  min-height: 100vh;
+}
+
+main, header, footer {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  flex-direction: column;
+}
+
+.header-container, .main-container, .footer-container {
+  width: 1200px;
+  display: flex;
+}
+
+/* Fonts */
+
+.ubuntu-regular {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.ubuntu-medium {
+  font-family: "Ubuntu", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.inter-semi-bold {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Header */
+
+.header-container {
+  justify-content: flex-end;
+  padding: 2rem 0;
+  gap: 1rem;
+}
+
+.switch-svg {
+  fill: #000000;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #8e96ab;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #cccccc;
+}
+
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Main content */
+
+.main-container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+.card-container {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+}
+
+.card {
+  width: 100%;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+  min-height: 100px;
+}
+
+.business {
+  border-left: 5px solid #1685E0;
+}
+
+.tech {
+  border-left: 5px solid #2BAC1A;
+}
+
+.sports {
+  border-left: 5px solid #8C0D0D;
+}
+
+.entertainments {
+  border-left: 5px solid #630F8B;
+}
+
+.politics {
+  border-left: 5px solid #BECA0F;
+}
+
+.card-icon {
+  width: 50px;
+  height: 50px;
+}
+
+/* Footer */
