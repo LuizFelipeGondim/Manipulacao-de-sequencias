@@ -15,10 +15,14 @@ class IndiceInvertido:
             self.trie.inserirPalavra(palavra, nome_documento)
  
 
-    def exibirDocumentos(self):
-        print(self.documentos)
+    def exibirTrie(self):
         self.trie.exibir()
 
     def pesquisarPalavra(self, palavra):
         self.trie.buscarPalavra(palavra)
     
+    def salvarDisco(self, caminho):
+        self.trie.salvar_em_disco(caminho)
+
+    def carregarDisco(self, caminho):
+        self.trie.carregar_de_disco(caminho)
