@@ -1,14 +1,13 @@
 class NoCompacto:
     def __init__(self):
         self.filhos={}
-        self.fim = False
         self.aparicoes={}
 
 class TrieCompacta:
     def __init__(self):
         self.raiz = NoCompacto()
 
-    def inserirPalavra(self, palavra, numDocumento):
+    def inserirPalavra(self, palavra, nome_documento):
         no = self.raiz
         while palavra:
             teve_prefixo_comum = False
@@ -40,17 +39,17 @@ class TrieCompacta:
                 # Nenhum prefixo em comum 
                 novo_no = NoCompacto()
                 novo_no.fim_palavra = True
-                if numDocumento not in novo_no.aparicoes:
-                    novo_no.aparicoes[numDocumento] = 1
-                else : novo_no.aparicoes[numDocumento] += 1
+                if nome_documento not in novo_no.aparicoes:
+                    novo_no.aparicoes[nome_documento] = 1
+                else : novo_no.aparicoes[nome_documento] += 1
                 no.filhos[palavra] = novo_no
                 return
 
         # Marca o fim da palavra
         no.fim_palavra = True
-        if numDocumento not in no.aparicoes:
-            no.aparicoes[numDocumento] = 1
-        else : no.aparicoes[numDocumento] += 1
+        if nome_documento not in no.aparicoes:
+            no.aparicoes[nome_documento] = 1
+        else : no.aparicoes[nome_documento] += 1
 
     def buscarPalavra(self, palavra):
         no = self.raiz
@@ -67,7 +66,6 @@ class TrieCompacta:
                 return False
         
         print(no.aparicoes)
-        return no.fim_palavra
     
     def _prefixo_comum(self, a, b):
         i = 0

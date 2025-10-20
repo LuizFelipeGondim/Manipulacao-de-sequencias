@@ -6,13 +6,13 @@ class IndiceInvertido:
         self.trie = TrieCompacta()
         self.arquivos_lidos = 0
 
-    def adicionarArquivo(self, conteudo):
-        self.arquivos_lidos += 1
-        self.documentos.append(self.arquivos_lidos)
+    def adicionarArquivo(self, conteudo, nome_documento):
+    
+        self.documentos.append(nome_documento)
         lista_palavras = conteudo.split()
 
         for palavra in lista_palavras:
-            self.trie.inserirPalavra(palavra, self.arquivos_lidos)
+            self.trie.inserirPalavra(palavra, nome_documento)
  
 
     def exibirDocumentos(self):
