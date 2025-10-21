@@ -2,7 +2,7 @@ import re
 import math
 
 class Retriever:
-    def __init__(self, indexer, data_folder="data/sport"):
+    def __init__(self, indexer, data_folder="data"):
         self.indexer = indexer
         self.data_folder = data_folder
 
@@ -10,6 +10,7 @@ class Retriever:
         tokens = self.tokenize(query)
         ast = self.parse(tokens)
         result_docs = self.evaluate(ast)
+        print(result_docs)
         ranked_results = self.rank_results(result_docs, query)
         return ranked_results
 
@@ -66,11 +67,11 @@ class Retriever:
 
         # Caso base: termo isolado
         if node.value not in ("AND", "OR"):
-            results = self.indexer.pesquisarPalavra(node.value)
+            results = self.indexer.search_word(node.value)
             if results is None:
                 return {}
-            # transforma lista de tuplas [(arquivo, freq)] em dict {arquivo: freq}
-            return {doc: freq for doc, freq in results}
+            # agora já é um dict {"doc.txt": freq}
+            return results
 
         # Caso recursivo: operador booleano
         left_results = self.evaluate(node.left)
@@ -78,11 +79,11 @@ class Retriever:
 
         if node.value == "AND":
             # Interseção: documentos presentes em ambos
-            intersection = {
+            return {
                 doc: left_results[doc] + right_results[doc]
                 for doc in left_results if doc in right_results
             }
-            return intersection
+
         elif node.value == "OR":
             # União: documentos presentes em pelo menos um
             union = dict(left_results)
@@ -90,53 +91,57 @@ class Retriever:
                 union[doc] = union.get(doc, 0) + freq
             return union
 
+
     def rank_results(self, results, query):
         if not results:
             return []
 
+        # Extrai os termos da consulta (ignorando operadores lógicos)
         terms = [t for t in re.findall(r"[a-zA-Z0-9]+", query) if t not in ("AND", "OR")]
-        scores = {}
 
-        # Calcula médias e desvios no corpus
         all_freqs = []
         for t in terms:
-            docs = self.indexer.pesquisarPalavra(t)
-            if docs:
-                all_freqs.extend([freq for _, freq in docs])
+            docs = self.indexer.search_word(t)
+            if docs:  # agora docs é um dict
+                all_freqs.extend(docs.values())
         if not all_freqs:
             return []
 
         mean_freq = sum(all_freqs) / len(all_freqs)
-        variance = sum((f - mean_freq)**2 for f in all_freqs) / len(all_freqs)
+        variance = sum((f - mean_freq) ** 2 for f in all_freqs) / len(all_freqs)
         std_dev = math.sqrt(variance) if variance > 0 else 1
 
-        # Para cada documento do resultado, calcula média dos z-scores
+        scores = {}
         for doc, total_freq in results.items():
-            term_scores = []
-            terms_in_doc = []  # lista dos termos que realmente aparecem no doc
+            term_scores = {}
             for term in terms:
-                term_docs = self.indexer.pesquisarPalavra(term)
+                term_docs = self.indexer.search_word(term)
                 if not term_docs:
                     continue
-                freq_dict = dict(term_docs)
-                if doc in freq_dict:
-                    z = (freq_dict[doc] - mean_freq) / std_dev
-                    term_scores.append(z)
-                    terms_in_doc.append(term)  # só adiciona se termo realmente ocorre no doc
-            if term_scores:
-                avg_score = sum(term_scores) / len(term_scores)
-                scores[doc] = (avg_score, terms_in_doc)  # agora guardamos os termos do doc
 
-        # Ordena por relevância decrescente
+                # term_docs é um dict, então acessamos direto a frequência
+                if doc in term_docs:
+                    freq = term_docs[doc]
+                    z = (freq - mean_freq) / std_dev
+                    term_scores[term] = z
+
+            if term_scores:
+                # Termo mais relevante = maior z-score
+                best_term = max(term_scores.items(), key=lambda x: x[1])[0]
+                # Média dos z-scores (para o ranking geral)
+                avg_score = sum(term_scores.values()) / len(term_scores)
+                # Guarda score e termo mais relevante
+                scores[doc] = (avg_score, best_term)
+
         ranked_docs = sorted(scores.items(), key=lambda x: x[1][0], reverse=True)
 
-        # Gera snippets para os top documentos
         final_results = []
-        for doc, (score, terms_in_doc) in ranked_docs:
-            snippet = self._generate_snippet(doc, terms_in_doc)
+        for doc, (score, best_term) in ranked_docs:
+            snippet = self._generate_snippet(doc, [best_term])
             final_results.append((doc, score, snippet))
 
         return final_results
+
 
     def _generate_snippet(self, filename, terms_in_doc):
         try:

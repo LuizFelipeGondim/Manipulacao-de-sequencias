@@ -1,5 +1,5 @@
 import json
-
+import os
 
 class CompactNode:
     def __init__(self):
@@ -68,10 +68,11 @@ class CompactTrie:
                     node = child
                     found = True
                     break
+
             if not found:
-                print("This word does not appear in any file.")
-                return False
-        print(node.occurrences)
+                return {}
+
+        return node.occurrences
 
     def _common_prefix(self, a, b):
         i = 0
@@ -88,6 +89,10 @@ class CompactTrie:
 
     def save_to_disk(self, file_path):
         """Saves the Trie in JSON format."""
+        directory = os.path.dirname(file_path)
+        if directory and not os.path.exists(directory):
+            os.makedirs(directory, exist_ok=True) 
+        
         structure = self._node_to_dict(self.root)
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(structure, f, ensure_ascii=False, indent=2)
