@@ -1,10 +1,18 @@
 from trie import TrieCompacta
+from utils import existeDisco
 
 class IndiceInvertido:
     def __init__(self):
         self.documentos = []
         self.trie = TrieCompacta()
         self.arquivos_lidos = 0
+
+        if(existeDisco() == True):
+            self.carregarDisco("../index_storage/disk.json")
+
+    def __del__(self):
+        if(existeDisco() == False):
+            self.salvarDisco("../index_storage/disk.json")      
 
     def adicionarArquivo(self, conteudo, nome_documento):
     

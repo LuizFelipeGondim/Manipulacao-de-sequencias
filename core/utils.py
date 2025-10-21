@@ -1,5 +1,6 @@
 import unicodedata
 import re
+from pathlib import Path
 
 def normalizar(texto: str) -> str:
     # Remove acentos
@@ -17,4 +18,12 @@ def normalizar(texto: str) -> str:
 def verificarModelo(entrada: str) -> bool:
     if (" ") in entrada:
         print("Digite apenas uma palavra!")
+        return False
+
+def existeDisco():
+    caminho = Path("../index_storage/disk.json")
+
+    if caminho.is_file():
+        return True
+    else:
         return False
