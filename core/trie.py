@@ -1,123 +1,122 @@
 import json
 
 
-
-class NoCompacto:
+class CompactNode:
     def __init__(self):
-        self.filhos={}
-        self.aparicoes={}
-        self.fim_palavra = False
+        self.children = {}
+        self.occurrences = {}
+        self.end_of_word = False
 
-class TrieCompacta:
+
+class CompactTrie:
     def __init__(self):
-        self.raiz = NoCompacto()
+        self.root = CompactNode()
 
-    def inserirPalavra(self, palavra, nome_documento):
-        no = self.raiz
-        while palavra:
-            teve_prefixo_comum = False
+    def insert_word(self, word, document_name):
+        node = self.root
+        while word:
+            has_common_prefix = False
 
-            for chave in list(no.filhos.keys()):
-                prefixo_comum = self._prefixo_comum(chave, palavra)
-                if prefixo_comum:
-                    # Caso 1: o prefixo é igual à chave existente
-                    if prefixo_comum == chave:
-                        no = no.filhos[chave]
-                        palavra = palavra[len(prefixo_comum):]
-                        teve_prefixo_comum = True
+            for key in list(node.children.keys()):
+                common_prefix = self._common_prefix(key, word)
+                if common_prefix:
+                    # Case 1: the prefix is equal to the existing key
+                    if common_prefix == key:
+                        node = node.children[key]
+                        word = word[len(common_prefix):]
+                        has_common_prefix = True
                         break
-                    # Caso 2: o prefixo é apenas parte da chave
+                    # Case 2: the prefix is only part of the key
                     else:
-                        # Divide o nó existente
-                        no_existente = no.filhos.pop(chave)                                #####
-                        novo_no = NoCompacto()
-                        
-                        novo_no.filhos[chave[len(prefixo_comum):]] = no_existente
-                        novo_no.fim_palavra = no_existente.fim_palavra and (chave[len(prefixo_comum):] == "")
-                        no.filhos[prefixo_comum] = novo_no
-                        no = novo_no
-                        palavra = palavra[len(prefixo_comum):]
-                        teve_prefixo_comum = True
+                        # Split the existing node
+                        existing_node = node.children.pop(key)
+                        new_node = CompactNode()
+
+                        new_node.children[key[len(common_prefix):]] = existing_node
+                        new_node.end_of_word = existing_node.end_of_word and (key[len(common_prefix):] == "")
+                        node.children[common_prefix] = new_node
+                        node = new_node
+                        word = word[len(common_prefix):]
+                        has_common_prefix = True
                         break
-                    
-            if teve_prefixo_comum == False:                                                
-                # Nenhum prefixo em comum 
-                novo_no = NoCompacto()
-                novo_no.fim_palavra = True
-                if nome_documento not in novo_no.aparicoes:
-                    novo_no.aparicoes[nome_documento] = 1
-                else : novo_no.aparicoes[nome_documento] += 1
-                no.filhos[palavra] = novo_no
+
+            if has_common_prefix == False:
+                # No common prefix
+                new_node = CompactNode()
+                new_node.end_of_word = True
+                if document_name not in new_node.occurrences:
+                    new_node.occurrences[document_name] = 1
+                else:
+                    new_node.occurrences[document_name] += 1
+                node.children[word] = new_node
                 return
 
-        # Marca o fim da palavra
-        no.fim_palavra = True
-        if nome_documento not in no.aparicoes:
-            no.aparicoes[nome_documento] = 1
-        else : no.aparicoes[nome_documento] += 1
+        # Mark the end of the word
+        node.end_of_word = True
+        if document_name not in node.occurrences:
+            node.occurrences[document_name] = 1
+        else:
+            node.occurrences[document_name] += 1
 
-    def buscarPalavra(self, palavra):
-        no = self.raiz
-        while palavra:
-            encontrado = False
-            for chave, filho in no.filhos.items():
-                if palavra.startswith(chave):           # verifica se chave é prefixo de palavra
-                    palavra = palavra[len(chave):]
-                    no = filho
-                    encontrado = True
+    def search_word(self, word):
+        node = self.root
+        while word:
+            found = False
+            for key, child in node.children.items():
+                if word.startswith(key):  # checks if key is a prefix of word
+                    word = word[len(key):]
+                    node = child
+                    found = True
                     break
-            if not encontrado:
-                print('Essa palavra não tem em nenhum arquivo')
+            if not found:
+                print("This word does not appear in any file.")
                 return False
-        print(no.aparicoes)
+        print(node.occurrences)
 
-    
-    def _prefixo_comum(self, a, b):
+    def _common_prefix(self, a, b):
         i = 0
         while i < len(a) and i < len(b) and a[i] == b[i]:
             i += 1
         return a[:i]
 
+    def display(self, node=None, prefix=""):
+        if node is None:
+            node = self.root
+        for key, child in node.children.items():
+            print(prefix + key + ("*" if child.end_of_word else ""))
+            self.display(child, prefix + "  ")
 
-    def exibir(self, no=None, prefixo=""):
-        if no is None:
-            no = self.raiz
-        for chave, filho in no.filhos.items():
-            print(prefixo + chave + ("*" if filho.fim_palavra else ""))
-            self.exibir(filho, prefixo + "  ")
+    def save_to_disk(self, file_path):
+        """Saves the Trie in JSON format."""
+        structure = self._node_to_dict(self.root)
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(structure, f, ensure_ascii=False, indent=2)
+        print(f"Trie saved to {file_path}")
 
-
-    def salvar_em_disco(self, caminho_arquivo):
-        """Salva a Trie em formato JSON."""
-        estrutura = self._no_para_dict(self.raiz)
-        with open(caminho_arquivo, "w", encoding="utf-8") as f:
-            json.dump(estrutura, f, ensure_ascii=False, indent=2)
-        print(f"Trie salva em {caminho_arquivo}")
-
-    def carregar_de_disco(self, caminho_arquivo):
-        """Reconstrói a Trie a partir de um arquivo JSON."""
-        with open(caminho_arquivo, "r", encoding="utf-8") as f:
-            estrutura = json.load(f)
-        self.raiz = self._dict_para_no(estrutura)
-        print(f"Trie carregada de {caminho_arquivo}")
+    def load_from_disk(self, file_path):
+        """Rebuilds the Trie from a JSON file."""
+        with open(file_path, "r", encoding="utf-8") as f:
+            structure = json.load(f)
+        self.root = self._dict_to_node(structure)
+        print(f"Trie loaded from {file_path}")
 
     # ================================================================
-    # FUNÇÕES RECURSIVAS AUXILIARES
+    # AUXILIARY RECURSIVE FUNCTIONS
     # ================================================================
 
-    def _no_para_dict(self, no):
-        """Converte o nó (recursivamente) em um dicionário JSON-serializável."""
+    def _node_to_dict(self, node):
+        """Recursively converts a node to a JSON-serializable dictionary."""
         return {
-            "fim_palavra": no.fim_palavra,
-            "aparicoes": no.aparicoes,
-            "filhos": {chave: self._no_para_dict(filho) for chave, filho in no.filhos.items()}
+            "end_of_word": node.end_of_word,
+            "occurrences": node.occurrences,
+            "children": {key: self._node_to_dict(child) for key, child in node.children.items()}
         }
 
-    def _dict_para_no(self, dicionario):
-        """Converte um dicionário de volta para um objeto NoCompacto."""
-        no = NoCompacto()
-        no.fim_palavra = dicionario["fim_palavra"]
-        no.aparicoes = dicionario["aparicoes"]
-        for chave, sub_no in dicionario["filhos"].items():
-            no.filhos[chave] = self._dict_para_no(sub_no)
-        return no
+    def _dict_to_node(self, dictionary):
+        """Converts a dictionary back into a CompactNode object."""
+        node = CompactNode()
+        node.end_of_word = dictionary["end_of_word"]
+        node.occurrences = dictionary["occurrences"]
+        for key, sub_node in dictionary["children"].items():
+            node.children[key] = self._dict_to_node(sub_node)
+        return node

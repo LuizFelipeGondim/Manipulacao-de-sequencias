@@ -1,36 +1,34 @@
-from trie import TrieCompacta
-from utils import existeDisco
+from trie import CompactTrie
+from utils import disk_exists
 
-class IndiceInvertido:
+class InvertedIndex:
     def __init__(self):
-        self.documentos = []
-        self.trie = TrieCompacta()
-        self.arquivos_lidos = 0
+        self.documents = []
+        self.trie = CompactTrie()
+        self.files_read = 0
 
-        if(existeDisco() == True):
-            self.carregarDisco("../index_storage/disk.json")
+        if disk_exists() == True:
+            self.load_from_disk("../index_storage/disk.json")
 
     def __del__(self):
-        if(existeDisco() == False):
-            self.salvarDisco("../index_storage/disk.json")      
+        if disk_exists() == False:
+            self.save_to_disk("../index_storage/disk.json")      
 
-    def adicionarArquivo(self, conteudo, nome_documento):
+    def add_file(self, content, document_name):
+        self.documents.append(document_name)
+        word_list = content.split()
+
+        for word in word_list:
+            self.trie.insert_word(word, document_name)
+
+    def show_trie(self):
+        self.trie.display()
+
+    def search_word(self, word):
+        self.trie.search_word(word)
     
-        self.documentos.append(nome_documento)
-        lista_palavras = conteudo.split()
+    def save_to_disk(self, path):
+        self.trie.save_to_disk(path)
 
-        for palavra in lista_palavras:
-            self.trie.inserirPalavra(palavra, nome_documento)
- 
-
-    def exibirTrie(self):
-        self.trie.exibir()
-
-    def pesquisarPalavra(self, palavra):
-        self.trie.buscarPalavra(palavra)
-    
-    def salvarDisco(self, caminho):
-        self.trie.salvar_em_disco(caminho)
-
-    def carregarDisco(self, caminho):
-        self.trie.carregar_de_disco(caminho)
+    def load_from_disk(self, path):
+        self.trie.load_from_disk(path)
