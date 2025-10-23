@@ -135,8 +135,8 @@ class Retriever:
         # Gera snippets
         final_results = []
         for doc, (score, best_term) in ranked_docs:
-            snippet = self._generate_snippet(doc, best_term)
-            final_results.append((doc, score, snippet))
+            (snippet, title) = self._generate_snippet(doc, best_term)
+            final_results.append((doc, snippet, title))
 
         return final_results
 
@@ -148,15 +148,14 @@ class Retriever:
             with open(path, "r", encoding="utf-8") as f:
                 lines = f.readlines()
 
-            # Ignora título
-            text = "".join(lines[1:]).strip()
-            text_lower = text.lower()
+            title = lines[0].strip() if lines else ""
+            text = "".join(lines).strip()
 
             # Encontra a primeira ocorrência do termo (case-insensitive)
             pattern_search = re.compile(rf"\b{re.escape(term)}\b", re.IGNORECASE)
             match = pattern_search.search(text)
             if not match:
-                return text[:160] + "..."
+                return (text[:160] + "...", title)
 
             first_pos = match.start()
 
@@ -174,7 +173,7 @@ class Retriever:
             if end < len(text):
                 snippet = snippet + "..."
 
-            return snippet
+            return (snippet, title)
 
         except Exception:
             return "(snippet unavailable)"

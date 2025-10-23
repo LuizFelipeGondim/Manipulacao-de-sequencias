@@ -54,24 +54,14 @@ class SearchController:
 
         for doc_info in retrieved_docs:
             filename = doc_info[0]
-            snippet = doc_info[2]
-            filepath = os.path.join("data", filename)
-
-            try:
-                with open(filepath, "r", encoding="utf-8") as f:
-                    lines = f.readlines()
-                    title = lines[0].strip() if lines else ""
-                    content = "".join(lines).strip()
-            except Exception:
-                title = ""
-                content = ""
+            snippet = doc_info[1]
+            title = doc_info[2]
 
             self.results.append({
                 "category": filename.split('.')[0][4:],
                 "filename": filename,
                 "snippet": snippet,
-                "title": title,
-                "content": content
+                "title": title
             })
 
         return {"results": self.results, "error": error_message}

@@ -19,11 +19,14 @@ function setDarkMode() {
 	title.style.color = lightGray;
 	search.style.backgroundColor = lightBlack;
 	search.style.color = lightGray;
-	paginationText.style.color = lightGray;
+	
+    if (paginationText && paginationText.style) paginationText.style.color = lightGray;
 
-	cardTitles.forEach((item) => {
-		item.style.color = lightGray;
-	});
+	if (cardTitles && cardTitles.length) {
+        cardTitles.forEach((item) => {
+            item.style.color = lightGray;
+        });
+    } 
 
 	resultMessages.forEach((item) => {
 		item.style.color = lightGray;
@@ -45,11 +48,14 @@ function setLightMode() {
     title.style.color = black;
 	search.style.backgroundColor = "white";
 	search.style.color = lightBlack;
-	paginationText.style.color = black;
 
-	cardTitles.forEach((item) => {
-		item.style.color = black;
-	});
+    if (paginationText && paginationText.style) paginationText.style.color = black;
+
+	if (cardTitles && cardTitles.length) {
+        cardTitles.forEach((item) => {
+            item.style.color = black;
+        });
+    }
 
 	resultMessages.forEach((item) => {
 		item.style.color = lightBlack;
