@@ -209,3 +209,4 @@ __marimo__/
 core/main.py
 core/teste.py
 index_storage/disk.json
+.vercel
