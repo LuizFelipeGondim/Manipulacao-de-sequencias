@@ -198,8 +198,8 @@ form .search-icon {
 }
 
 .card-container:hover {
-	box-shadow: 0 0 15px 2px var(--light-shadow);
-	transition: 0.5s;
+	box-shadow: 0 0 12px 1px var(--light-shadow);
+	transition: box-shadow 0.7s ease, width 0.5s ease;
 }
 
 .business {
@@ -227,6 +227,10 @@ form .search-icon {
 	height: 50px;
 }
 
+.card-content {
+	width: 100%;
+}
+
 .card-content h2{
 	margin-bottom: 1rem;
 	font-size: 20px;
@@ -238,6 +242,16 @@ form .search-icon {
 	color: var(--gray)
 }
 
+.archive-name {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.archive-name p {
+	color: var(--gray);
+	font-size: 13px;
+}
+
 .pagination {
 	width: 300px;
 	display: flex;
@@ -246,6 +260,7 @@ form .search-icon {
 	gap: 1rem;
 	color: var(--black);
 	margin-bottom: 24px;
+	text-align: center;
 }
 
 .pagination a {

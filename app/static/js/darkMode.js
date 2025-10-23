@@ -1,0 +1,80 @@
+const checkbox = document.getElementById("switch-checkbox");
+
+const black = "#16161D";
+const lightBlack = "#2C2C2C";
+const gray = "#9C98A6";
+const lightGray = "#F0F0F7";
+const lightShadow = "#cccccc";
+
+const svgs = document.querySelectorAll(".switch-svg");
+const title = document.querySelector(".main-title");
+const search = document.querySelector(".search");
+const resultMessages = document.querySelectorAll(".result-message");
+const cards = document.querySelectorAll(".card-container");
+const cardTitles = document.querySelectorAll(".card-title");
+const paginationText = document.querySelector(".pagination-text");
+
+function setDarkMode() {
+    document.body.style.backgroundColor = black;
+	title.style.color = lightGray;
+	search.style.backgroundColor = lightBlack;
+	search.style.color = lightGray;
+	paginationText.style.color = lightGray;
+
+	cardTitles.forEach((item) => {
+		item.style.color = lightGray;
+	});
+
+	resultMessages.forEach((item) => {
+		item.style.color = lightGray;
+	});
+
+    cards.forEach((item) => {
+        item.style.backgroundColor = lightBlack;
+    });
+
+    svgs.forEach((item) => {
+        item.style.fill = gray;
+    });
+
+    localStorage.setItem("@dark-mode", "enabled")
+}
+
+function setLightMode() {
+    document.body.style.backgroundColor = lightGray;
+    title.style.color = black;
+	search.style.backgroundColor = "white";
+	search.style.color = lightBlack;
+	paginationText.style.color = black;
+
+	cardTitles.forEach((item) => {
+		item.style.color = black;
+	});
+
+	resultMessages.forEach((item) => {
+		item.style.color = lightBlack;
+	});
+
+    cards.forEach((item) => {
+        item.style.backgroundColor = "white";
+    });
+
+    svgs.forEach((item) => {
+        item.style.fill = black;
+    });
+
+    localStorage.removeItem("@dark-mode");
+}
+
+checkbox.addEventListener("change", function() {
+    if (checkbox.checked) {
+        setDarkMode();
+    } else {
+        setLightMode();
+    }
+})
+
+if (localStorage.getItem("@dark-mode") === "enabled") {
+    checkbox.checked = true;
+    setDarkMode();
+}

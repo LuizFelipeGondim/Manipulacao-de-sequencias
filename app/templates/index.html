@@ -1,11 +1,11 @@
 {% extends 'base.html' %} {% block title %}BBC Search{% endblock %} {% block
 content %}
-<h1 class="inter-semi-bold">BBC Search</h1>
+<h1 class="inter-semi-bold main-title">BBC Search</h1>
 
 <form method="post">
   <input
     type="text"
-    class="ubuntu-regular"
+    class="ubuntu-regular search"
     name="q"
     placeholder="Digite sua busca..."
     value="{{ query or '' }}"
@@ -35,7 +35,6 @@ content %}
 
 <ul class="cards">
   {% for r in results_on_page %}
-  <p>{{ r.filename }}</p>
   <li class="card-container {{ r.category }}">
     {% set icon = category_icons.get(r.category) %} {% if icon %}
     <img
@@ -46,8 +45,12 @@ content %}
     {% endif %}
 
     <div class="card-content">
-      <h2 class="inter-semi-bold">{{ r.title }}</h2>
+      <h2 class="inter-semi-bold card-title">{{ r.title }}</h2>
       <p class="ubuntu-regular">{{ r.snippet|safe }}</p>
+
+      <div class="archive-name">
+        <p class="ubuntu-regular">Nome do arquivo: {{ r.filename }}</p>
+      </div>
     </div>
   </li>
   {% endfor %}
@@ -62,7 +65,7 @@ content %}
   >
   {% endif %}
 
-  <p class="ubuntu-regular">Página {{ page }} de {{ total_pages }}</p>
+  <p class="ubuntu-regular pagination-text">Página {{ page }} de {{ total_pages }}</p>
 
   {% if page < total_pages %}
   <a
