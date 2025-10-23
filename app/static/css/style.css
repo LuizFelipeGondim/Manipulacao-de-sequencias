@@ -1,160 +1,289 @@
+:root {
+	--black: #16161D;
+	--light-black: #2C2C2C;
+	--gray: #9C98A6;
+	--light-gray: #F0F0F7;
+	--light-shadow: #cccccc;
+	--blue: #233183;
+}
+
 body {
-  background-color: #e5e7eb;
-  min-height: 100vh;
+	background-color: var(--light-gray);
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
 
 main, header, footer {
-  display: flex;
-  align-items: center;
-  margin: 0 auto;
-  flex-direction: column;
+	display: flex;
+	align-items: center;
+	margin: 0 auto;
+	flex-direction: column;
 }
 
 .header-container, .main-container, .footer-container {
-  width: 1200px;
-  display: flex;
+	width: 1200px;
+	display: flex;
 }
 
 /* Fonts */
 
 .ubuntu-regular {
-  font-family: "Ubuntu", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+	font-family: "Ubuntu", sans-serif;
+	font-weight: 400;
+	font-style: normal;
 }
 
 .ubuntu-medium {
-  font-family: "Ubuntu", sans-serif;
-  font-weight: 500;
-  font-style: normal;
+	font-family: "Ubuntu", sans-serif;
+	font-weight: 500;
+	font-style: normal;
 }
 
 .inter-semi-bold {
-  font-family: "Inter", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 600;
-  font-style: normal;
+	font-family: "Inter", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 600;
+	font-style: normal;
+	
+}
+
+.highlight {
+	background-color: yellow;
+	font-weight: bold;
+	color: var(--black);
 }
 
 /* Header */
 
 .header-container {
-  justify-content: flex-end;
-  padding: 2rem 0;
-  gap: 1rem;
+	justify-content: flex-end;
+	padding: 2rem 0;
+	gap: 1rem;
 }
 
 .switch-svg {
-  fill: #000000;
+	fill: var(--black);
 }
 
 .switch {
-  position: relative;
-  display: inline-block;
-  width: 52px;
-  height: 28px;
+	position: relative;
+	display: inline-block;
+	width: 52px;
+	height: 28px;
 }
 
 .switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+	opacity: 0;
+	width: 0;
+	height: 0;
 }
 
 .slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #8e96ab;
-  -webkit-transition: .4s;
-  transition: .4s;
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #8e96ab;
+	-webkit-transition: .4s;
+	transition: .4s;
 }
 
 .slider:before {
-  position: absolute;
-  content: "";
-  height: 20px;
-  width: 20px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+	position: absolute;
+	content: "";
+	height: 20px;
+	width: 20px;
+	left: 4px;
+	bottom: 4px;
+	background-color: white;
+	-webkit-transition: .4s;
+	transition: .4s;
 }
 
 input:checked + .slider {
-  background-color: #cccccc;
+	background-color: var(--light-shadow);
 }
 
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+	-webkit-transform: translateX(26px);
+	-ms-transform: translateX(26px);
+	transform: translateX(26px);
 }
 
 .slider.round {
-  border-radius: 34px;
+	border-radius: 34px;
 }
 
 .slider.round:before {
-  border-radius: 50%;
+	border-radius: 50%;
 }
 
 /* Main content */
 
 .main-container {
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 1.5rem;
+	flex: 1;
 }
 
 h1 {
-  font-size: 2rem;
+	font-size: 3rem;
+	color: var(--black);
+}
+
+form {
+	display: flex;
+	align-items: center;
+}
+
+form input {
+	width: 280px;
+	padding: 0.8rem;
+	border: 1px solid var(--light-black);
+	border-radius: 8px 0 0 8px;
+	color: var(--light-black);
+}
+
+form button {
+	padding: 6px 10px 8px 10px;
+	margin-left: -2px;
+	border-radius: 0 8px 8px 0;
+	background-color: var(--blue);
+	transition: 0.8s;
+}
+
+form button:hover {
+	cursor: pointer;
+	background-color: var(--light-black);
+}
+
+form .search-icon {
+	margin-top: 5px;
+}
+
+.error-message {
+	width: 300px;
+	padding: 1rem;
+	border: 1px solid red;
+	border-radius: 8px;
+	color: red;
+	background-color: rgba(255, 0, 0, 0.1);
+	text-align: center;
+}
+
+.result-message {
+	color: var(--light-black);
+}
+
+.cards {
+	width: 100%;
+	display: flex;
+	gap: 1rem;
+	flex-direction: column;
 }
 
 .card-container {
-  width: 100%;
-  display: flex;
-  gap: 1rem;
-  flex-direction: column;
+	padding: 1rem;
+	background-color: white;
+	border-radius: 8px;
+	min-height: 100px;
+	display: flex;
+	gap: 1rem;
 }
 
-.card {
-  width: 100%;
-  padding: 1rem;
-  background-color: white;
-  border-radius: 8px;
-  min-height: 100px;
+.card-container:hover {
+	box-shadow: 0 0 15px 2px var(--light-shadow);
+	transition: 0.5s;
 }
 
 .business {
-  border-left: 5px solid #1685E0;
+	border-left: 5px solid #1685E0;
 }
 
 .tech {
-  border-left: 5px solid #2BAC1A;
+	border-left: 5px solid #2BAC1A;
 }
 
-.sports {
-  border-left: 5px solid #8C0D0D;
+.sport {
+	border-left: 5px solid #8C0D0D;
 }
 
-.entertainments {
-  border-left: 5px solid #630F8B;
+.entertainment {
+	border-left: 5px solid #630F8B;
 }
 
 .politics {
-  border-left: 5px solid #BECA0F;
+	border-left: 5px solid #BECA0F;
 }
 
 .card-icon {
-  width: 50px;
-  height: 50px;
+	width: 50px;
+	height: 50px;
+}
+
+.card-content h2{
+	margin-bottom: 1rem;
+	font-size: 20px;
+	color: var(--black)
+}
+
+.card-content p{
+	margin-bottom: 1rem;
+	color: var(--gray)
+}
+
+.pagination {
+	width: 300px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
+	color: var(--black);
+	margin-bottom: 24px;
+}
+
+.pagination a {
+	background-color: var(--blue);
+	color: var(--light-gray);
+	padding: 0.5rem;
+	border-radius: 8px;
 }
 
 /* Footer */
+
+footer {
+	background-color: var(--blue);
+	width: 100%;
+	margin-top: auto;
+}
+
+.footer-container {
+	padding: 1rem 0;
+	color: var(--light-gray);
+}
+
+/* Media Queries */
+
+@media (max-width: 1024px) {
+  .header-container, .main-container, .footer-container {
+		width: 750px;
+	}
+}
+
+@media (max-width: 768px) {
+  .header-container, .main-container, .footer-container {
+		width: 400px;
+	}
+}
+
+@media (max-width: 400px) {
+  .header-container, .main-container, .footer-container {
+		width: 300px;
+	}
+}

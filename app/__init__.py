@@ -1,18 +1,12 @@
 from flask import Flask
-from core import Indexer, Retriever
+from core.indexer import InvertedIndex
 
 def create_app():
     app = Flask(__name__)
     app.secret_key = "chave-super-secreta-e-unica"
     
-    indexer = Indexer()
-    retriever = Retriever()
-
-    # carrega data e constroi índice
-
-    # app.config['INDEXER'] = indexer
-    # app.config['RETRIEVER'] = retriever
-    # app.config['DATA'] = data
+    indexer = InvertedIndex()
+    app.config['INDEXER'] = indexer
 
     from .routes import main
     app.register_blueprint(main)

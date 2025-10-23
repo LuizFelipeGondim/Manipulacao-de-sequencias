@@ -1,51 +1,80 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block title %}BBC Search{% endblock %} {% block
+content %}
+<h1 class="inter-semi-bold">BBC Search</h1>
 
-{% block title %}BBC News{% endblock %}
+<form method="post">
+  <input
+    type="text"
+    class="ubuntu-regular"
+    name="q"
+    placeholder="Digite sua busca..."
+    value="{{ query or '' }}"
+  />
+  <button type="submit" class="ubuntu-regular">
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+	  class="search-icon"
+    >
+      <path
+        d="M18.677 19.607L12.962 13.891C10.4196 15.6984 6.91642 15.2563 4.90285 12.8739C2.88929 10.4915 3.03714 6.96358 5.24298 4.75799C7.44824 2.55144 10.9765 2.40295 13.3594 4.4164C15.7422 6.42986 16.1846 9.93344 14.377 12.476L20.092 18.192L18.678 19.606L18.677 19.607ZM9.48498 4.99997C7.58868 4.99955 5.95267 6.33066 5.56745 8.18742C5.18224 10.0442 6.15369 11.9163 7.89366 12.6702C9.63362 13.4242 11.6639 12.8528 12.7552 11.302C13.8466 9.75126 13.699 7.64731 12.402 6.26399L13.007 6.86399L12.325 6.18399L12.313 6.17199C11.5648 5.41917 10.5464 4.99712 9.48498 4.99997Z"
+        fill="#ffffff"
+      />
+    </svg>
+  </button>
+</form>
 
-{% block content %}
-  <h1 class="inter-semi-bold">Busca BBC News</h1>
+{% if error_msg %}
+<span class="error-message ubuntu-medium">{{ error_msg }}</span>
+{% endif %} {% if results_on_page %} {% if query %}
+<p class="result-message ubuntu-regular">Resultados para: "{{ query }}"</p>
+{% endif %}
 
-  <form method="post">
-    <input type="text" name="q" placeholder="Digite sua busca..." value="{{ query or '' }}">
-    <button type="submit">Buscar</button>
-  </form>
-
-  {% if query %}
-    <h2>Resultados para: "{{ query }}"</h2>
-  {% endif %}
-
-  {% if results_on_page %}
-
-    <ul class="card-container">
-
-      {% for r in results_on_page %}
-        <li class="card {{ r.category }}">
-
-          {% set icon = category_icons.get(r.category) %}
-
-          {% if icon %}
-            <img src="{{ url_for('static', filename=icon) }}" alt="{{ r.category }} icon" class="card-icon">
-          {% endif %}
-
-          <strong>{{ r.title }}</strong><br>
-          <small>{{ r.snippet }}</small>
-        </li>
-      {% endfor %}
-
-    </ul>
-
-    {% if page > 1 %}
-      <a href="{{ url_for('main.index', page=page-1) }}">Anterior</a>
+<ul class="cards">
+  {% for r in results_on_page %}
+  <p>{{ r.filename }}</p>
+  <li class="card-container {{ r.category }}">
+    {% set icon = category_icons.get(r.category) %} {% if icon %}
+    <img
+      src="{{ url_for('static', filename=icon) }}"
+      alt="{{ r.category }} icon"
+      class="card-icon"
+    />
     {% endif %}
 
-    <span>Pagina {{page}} de {{total_pages}}</span>
+    <div class="card-content">
+      <h2 class="inter-semi-bold">{{ r.title }}</h2>
+      <p class="ubuntu-regular">{{ r.snippet|safe }}</p>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
 
-    {% if page < total_pages %}
-      <a href="{{ url_for('main.index', page=page+1) }}">Posterior</a>
-    {% endif %}
-
-  {% elif query %}
-    <p>Nenhum resultado encontrado para "{{ query }}"</p>
+<div class="pagination">
+  {% if page > 1 %}
+  <a
+    href="{{ url_for('main.index', page=page-1, q=query) }}"
+    class="ubuntu-regular"
+    >Anterior</a
+  >
   {% endif %}
-  
-{% endblock %}
+
+  <p class="ubuntu-regular">Página {{ page }} de {{ total_pages }}</p>
+
+  {% if page < total_pages %}
+  <a
+    href="{{ url_for('main.index', page=page+1, q=query) }}"
+    class="ubuntu-regular"
+    >Posterior</a
+  >
+  {% endif %}
+</div>
+
+{% elif query and not error_msg %}
+<p class="result-message ubuntu-regular">
+  Nenhum resultado encontrado para "{{ query }}"
+</p>
+{% endif %} {% endblock %}

@@ -1,5 +1,5 @@
-from .indexer import Indexer
+from .indexer import InvertedIndex
 from .retriever import Retriever
-from .trie import Trie
+from .trie import CompactTrie
 
 __all__ = ["Indexer", "Retriever", "Trie"]

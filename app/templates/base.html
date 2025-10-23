@@ -1,53 +1,72 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{% block title %}{% endblock %}</title>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{% block title %}{% endblock %}</title>
+		<link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,600&family=Ubuntu:wght@400;500&display=swap" rel="stylesheet">
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/reset.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
-  </head>
-  <body>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,600&family=Ubuntu:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static', filename='css/reset.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static', filename='css/style.css') }}"
+		/>
+	</head>
+	<body>
+		<header>
+			<div class="header-container">
+				<svg
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+				>
+					<path
+					class="switch-svg"
+					d="M12.998 22H10.998V19H12.998V22ZM18.362 19.778L16.241 17.657L17.655 16.243L19.777 18.365L18.364 19.778H18.362ZM5.63405 19.778L4.21905 18.364L6.33905 16.242L7.75405 17.656L5.63405 19.777V19.778ZM11.998 17.007C9.23302 17.0059 6.99231 14.7637 6.99305 11.9987C6.99378 9.23364 9.23568 6.99263 12.0007 6.993C14.7657 6.99337 17.007 9.23497 17.007 12C17.0043 14.7649 14.763 17.0053 11.998 17.007ZM11.998 8.993C10.3376 8.9941 8.99231 10.3409 8.99305 12.0013C8.99378 13.6618 10.3403 15.0074 12.0007 15.007C13.6612 15.0066 15.007 13.6605 15.007 12C15.0054 10.3392 13.6589 8.99355 11.998 8.993ZM21.998 13H18.998V11H21.998V13ZM4.99805 13H1.99805V11H4.99805V13ZM17.654 7.758L16.241 6.343L18.362 4.221L19.777 5.636L17.655 7.757L17.654 7.758ZM6.34105 7.758L4.22105 5.637L5.63605 4.223L7.75605 6.345L6.34205 7.757L6.34105 7.758ZM12.998 5H10.998V2H12.998V5Z"
+					fill="#F0F0F7"
+					/>
+				</svg>
 
-    <header>
-      <div class="header-container">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path class="switch-svg" d="M12.998 22H10.998V19H12.998V22ZM18.362 19.778L16.241 17.657L17.655 16.243L19.777 18.365L18.364 19.778H18.362ZM5.63405 19.778L4.21905 18.364L6.33905 16.242L7.75405 17.656L5.63405 19.777V19.778ZM11.998 17.007C9.23302 17.0059 6.99231 14.7637 6.99305 11.9987C6.99378 9.23364 9.23568 6.99263 12.0007 6.993C14.7657 6.99337 17.007 9.23497 17.007 12C17.0043 14.7649 14.763 17.0053 11.998 17.007ZM11.998 8.993C10.3376 8.9941 8.99231 10.3409 8.99305 12.0013C8.99378 13.6618 10.3403 15.0074 12.0007 15.007C13.6612 15.0066 15.007 13.6605 15.007 12C15.0054 10.3392 13.6589 8.99355 11.998 8.993ZM21.998 13H18.998V11H21.998V13ZM4.99805 13H1.99805V11H4.99805V13ZM17.654 7.758L16.241 6.343L18.362 4.221L19.777 5.636L17.655 7.757L17.654 7.758ZM6.34105 7.758L4.22105 5.637L5.63605 4.223L7.75605 6.345L6.34205 7.757L6.34105 7.758ZM12.998 5H10.998V2H12.998V5Z" fill="#F0F0F7"/>
-        </svg>
+				<label class="switch">
+					<input type="checkbox" id="switch-checkbox" />
+					<span class="slider round"></span>
+				</label>
 
-        <label class="switch">
-          <input type="checkbox" id="switch-checkbox">
-          <span class="slider round"></span>
-        </label>
-          
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path class="switch-svg" d="M11.9709 22H11.0709C8.42153 21.7651 5.97958 20.4693 4.29991 18.407C2.60399 16.3478 1.79218 13.701 2.04191 11.045C2.43521 6.22905 6.2528 2.40342 11.0679 1.99998C11.4618 1.99793 11.8332 2.18361 12.0679 2.5C12.2873 2.84915 12.2464 3.30187 11.9679 3.606C11.0112 4.90556 10.615 6.53421 10.8679 8.128C11.0781 9.71686 11.9535 11.1416 13.2759 12.047C15.3767 13.6555 18.2951 13.6555 20.3959 12.047C20.5871 11.9144 20.8133 11.8414 21.0459 11.837C21.2037 11.8373 21.3592 11.8746 21.4999 11.946C21.8168 12.1825 22.0025 12.5556 21.9999 12.951C21.8009 15.6323 20.4925 18.1092 18.3899 19.785C16.544 21.1943 14.2931 21.971 11.9709 22ZM9.16291 4.311C6.22155 5.35162 4.17475 8.03423 3.94791 11.146C3.74749 13.2674 4.39661 15.3816 5.75291 17.025C7.09926 18.6691 9.05118 19.7015 11.1679 19.889C11.4299 19.914 11.6959 19.927 11.9579 19.927C13.8022 19.9417 15.5889 19.2852 16.9849 18.08C18.0689 17.168 18.8982 15.9908 19.3919 14.663C18.5222 14.9771 17.6046 15.1375 16.6799 15.137C14.9493 15.1366 13.264 14.5834 11.8699 13.558C10.1857 12.2775 9.04137 10.4134 8.66191 8.332C8.57163 6.972 8.74167 5.60726 9.16291 4.311Z" fill="#F0F0F7"/>
-        </svg>
-  
-        </div>
-    </header>
+				<svg
+				width="24"
+				height="24"
+				viewBox="0 0 24 24"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+				>
+					<path
+					class="switch-svg"
+					d="M11.9709 22H11.0709C8.42153 21.7651 5.97958 20.4693 4.29991 18.407C2.60399 16.3478 1.79218 13.701 2.04191 11.045C2.43521 6.22905 6.2528 2.40342 11.0679 1.99998C11.4618 1.99793 11.8332 2.18361 12.0679 2.5C12.2873 2.84915 12.2464 3.30187 11.9679 3.606C11.0112 4.90556 10.615 6.53421 10.8679 8.128C11.0781 9.71686 11.9535 11.1416 13.2759 12.047C15.3767 13.6555 18.2951 13.6555 20.3959 12.047C20.5871 11.9144 20.8133 11.8414 21.0459 11.837C21.2037 11.8373 21.3592 11.8746 21.4999 11.946C21.8168 12.1825 22.0025 12.5556 21.9999 12.951C21.8009 15.6323 20.4925 18.1092 18.3899 19.785C16.544 21.1943 14.2931 21.971 11.9709 22ZM9.16291 4.311C6.22155 5.35162 4.17475 8.03423 3.94791 11.146C3.74749 13.2674 4.39661 15.3816 5.75291 17.025C7.09926 18.6691 9.05118 19.7015 11.1679 19.889C11.4299 19.914 11.6959 19.927 11.9579 19.927C13.8022 19.9417 15.5889 19.2852 16.9849 18.08C18.0689 17.168 18.8982 15.9908 19.3919 14.663C18.5222 14.9771 17.6046 15.1375 16.6799 15.137C14.9493 15.1366 13.264 14.5834 11.8699 13.558C10.1857 12.2775 9.04137 10.4134 8.66191 8.332C8.57163 6.972 8.74167 5.60726 9.16291 4.311Z"
+					fill="#F0F0F7"
+					/>
+				</svg>
+			</div>
+		</header>
 
-    <main>
-      <div class="main-container">
-        {% block content %}{% endblock %}    
-      </div>
-    </main>
+		<main>
+			<div class="main-container">{% block content %}{% endblock %}</div>
+		</main>
 
-    <footer>
-      <div class="footer-container">
-        <p>Feito com Flask + Jinja</p> 
-      </div>
-    </footer>
-
-  </body>
+		<footer>
+			<div class="footer-container">
+				<p class="ubuntu-medium">Feito por João Carlos e Luiz Felipe Gondim</p>
+			</div>
+		</footer>
+	</body>
 </html>

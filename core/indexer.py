@@ -1,5 +1,5 @@
-from trie import CompactTrie
-from utils import disk_exists, normalize
+from .trie import CompactTrie
+from .utils import disk_exists, normalize
 from pathlib import Path
 
 class InvertedIndex:

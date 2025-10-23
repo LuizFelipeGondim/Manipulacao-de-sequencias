@@ -1,24 +1,77 @@
+from core.retriever import Retriever
+from flask import current_app
+import os
+
 class SearchController:
-  def __init__(self):
-    self.results = []
+    def __init__(self):
+        self.results = []
 
-  def searchResults(self, query):
-    if not query:
-      self.results = [{"title": "BBC News sobre festival", "snippet": "O mercado global...", "category": "tech"}]
-      return self.results
+    def _process_query_string(self, query):
+        query = query.strip()
+        tokens = query.split()
 
-    self.results = [
-      {"title": "BBC News sobre economia", "snippet": "O mercado global...", "category": "tech"},
-      {"title": "BBC News sobre política", "snippet": "O governo anunciou...", "category": "business"},
-      {"title": "BBC News sobre farmácia", "snippet": "O mercado global...", "category": "entertainments"},
-      {"title": "BBC News sobre saúde", "snippet": "O governo anunciou...", "category": "politics"},
-      {"title": "BBC News sobre festa", "snippet": "O mercado global...", "category": "sports"},
-      {"title": "BBC News sobre festival", "snippet": "O mercado global...", "category": "tech"},
-      {"title": "BBC News sobre saúde", "snippet": "O governo anunciou...", "category": "politics"},
-      {"title": "BBC News sobre festa", "snippet": "O mercado global...", "category": "sports"},
-      {"title": "BBC News sobre festival", "snippet": "O mercado global...", "category": "tech"},
-      {"title": "BBC News sobre guerra", "snippet": "O governo anunciou...", "category": "sports"}
-    ]
+        processed_tokens = []
+        logical_ops = {"AND", "OR"}
 
-    return self.results
-  
+        for token in tokens:
+            if token in logical_ops:
+                processed_tokens.append(token)
+            else:
+                processed_tokens.append(token.lower())
+
+        # Verifica se contém apenas conectores lógicos
+        if all(t in logical_ops for t in processed_tokens):
+            raise ValueError("Consulta inválida: contém apenas conectores lógicos.")
+
+        # Verifica se há duas palavras seguidas sem operador lógico
+        for i in range(len(processed_tokens) - 1):
+            if (
+                processed_tokens[i] not in logical_ops
+                and processed_tokens[i + 1] not in logical_ops
+            ):
+                raise ValueError(
+                    f"Consulta inválida: '{processed_tokens[i]}' e '{processed_tokens[i+1]}' sem operador lógico entre elas."
+                )
+
+        return " ".join(processed_tokens)
+
+    def searchResults(self, query):
+        self.results = []
+        error_message = None
+
+        try:
+            query_processed = self._process_query_string(query)
+        except ValueError as e:
+            return {"results": [], "error": str(e)}
+        except Exception:
+            return {"results": [], "error": "Erro ao processar a consulta."}
+
+        try:
+            retriever = Retriever(current_app.config['INDEXER'], "data")
+            retrieved_docs = retriever.process_query(query_processed)
+        except Exception as e:
+            return {"results": [], "error": f"Erro ao buscar resultados"}
+
+        for doc_info in retrieved_docs:
+            filename = doc_info[0]
+            snippet = doc_info[2]
+            filepath = os.path.join("data", filename)
+
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    lines = f.readlines()
+                    title = lines[0].strip() if lines else ""
+                    content = "".join(lines).strip()
+            except Exception:
+                title = ""
+                content = ""
+
+            self.results.append({
+                "category": filename.split('.')[0][4:],
+                "filename": filename,
+                "snippet": snippet,
+                "title": title,
+                "content": content
+            })
+
+        return {"results": self.results, "error": error_message}
