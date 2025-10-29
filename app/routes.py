@@ -9,7 +9,6 @@ def index():
 	controller = SearchController()
 	per_page = 10
 	page = request.args.get("page", 1, type=int)
-	filename = ""
 
 	results = []
 	error_msg = None
@@ -24,7 +23,6 @@ def index():
 		response = controller.searchResults(query)
 		results = response.get("results", [])
 		error_msg = response.get("error")
-		filename = response.get("filename")
 
 	# Paginação
 	start = (page - 1) * per_page
@@ -48,5 +46,4 @@ def index():
 		category_icons=category_icons,
 		results_on_page=results_on_page,
 		error_msg=error_msg,
-		filename=filename
 	)

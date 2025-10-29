@@ -56,12 +56,14 @@ class SearchController:
             filename = doc_info[0]
             snippet = doc_info[1]
             title = doc_info[2]
+            score = doc_info[3]
 
             self.results.append({
                 "category": filename.split('.')[0][4:],
                 "filename": filename,
                 "snippet": snippet,
-                "title": title
+                "title": title,
+                "score": score
             })
 
         return {"results": self.results, "error": error_message}

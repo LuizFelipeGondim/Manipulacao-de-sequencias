@@ -45,7 +45,7 @@ content %}
     {% endif %}
 
     <div class="card-content">
-      <h2 class="inter-semi-bold card-title">{{ r.title }}</h2>
+      <h2 class="inter-semi-bold card-title">{{ r.title }} | {{ r.score | round(2) }}</h2>
       <p class="ubuntu-regular">{{ r.snippet|safe }}</p>
 
       <div class="archive-name">

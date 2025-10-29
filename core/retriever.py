@@ -136,7 +136,7 @@ class Retriever:
         final_results = []
         for doc, (score, best_term) in ranked_docs:
             (snippet, title) = self._generate_snippet(doc, best_term)
-            final_results.append((doc, snippet, title))
+            final_results.append((doc, snippet, title, score))
 
         return final_results
 
