@@ -19,21 +19,35 @@ class SearchController:
             else:
                 processed_tokens.append(token.lower())
 
-        # Verifica se contém apenas conectores lógicos
-        if all(t in logical_ops for t in processed_tokens):
-            raise ValueError("Consulta inválida: contém apenas conectores lógicos.")
+        # Verifica se ha espaco entre os parenteses e os outros termos
+        if "(" in processed_tokens or ")" in processed_tokens:
+            raise ValueError("Consulta inválida: Não é aceito espaço entre '(' ou ')' e uma palavra/conector.")
 
-        # Verifica se há duas palavras seguidas sem operador lógico
+        # Verifica se a query inicia ou termina com algum conector logico
+        if processed_tokens[0] in logical_ops or processed_tokens[-1] in logical_ops:
+            raise ValueError("Consulta inválida: Conectores lógicos não podem iniciar ou finalizar consultas.")
+
+        # Percorre tokens para validar estrutura
         for i in range(len(processed_tokens) - 1):
+            curr, nxt = processed_tokens[i], processed_tokens[i + 1]
+
+            # Caso 1: duas palavras seguidas sem operador lógico
             if (
-                processed_tokens[i] not in logical_ops
-                and processed_tokens[i + 1] not in logical_ops
+                curr not in logical_ops and curr not in {"(", ")"}
+                and nxt not in logical_ops and nxt not in {"(", ")"}
             ):
                 raise ValueError(
-                    f"Consulta inválida: '{processed_tokens[i]}' e '{processed_tokens[i+1]}' sem operador lógico entre elas."
+                    f"Consulta inválida: '{curr}' e '{nxt}' sem operador lógico entre elas."
+                )
+
+            # Caso 2: dois operadores lógicos seguidos
+            if curr in logical_ops and nxt in logical_ops:
+                raise ValueError(
+                    f"Consulta inválida: operadores '{curr}' e '{nxt}' consecutivos."
                 )
 
         return " ".join(processed_tokens)
+
 
     def searchResults(self, query):
         self.results = []
