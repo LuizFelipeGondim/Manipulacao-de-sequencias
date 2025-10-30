@@ -2,12 +2,13 @@ from core.retriever import Retriever
 from flask import current_app
 import os
 
+# Controller de consulta que faz o intermédio entre o front e o core
 class SearchController:
     def __init__(self):
         self.results = []
 
+    # Processa a query de maneira que verifica a maioria dos casos em que ela não é válida. Caso não seja válida, retorna um erro específico.
     def _process_query_string(self, query):
-        query = query.strip()
         tokens = query.split()
 
         processed_tokens = []
@@ -48,7 +49,7 @@ class SearchController:
 
         return " ".join(processed_tokens)
 
-
+    # Realiza a consulta através do Retriever e processa os dados que serão retornados para o módulo de rotas.
     def searchResults(self, query):
         self.results = []
         error_message = None

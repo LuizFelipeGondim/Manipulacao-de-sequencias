@@ -6,25 +6,29 @@ class Retriever:
         self.indexer = indexer
         self.data_folder = data_folder
 
+    # Executa as funcoes auxiliares e retorna as noticias selecionadas pela query ordenadas por score (decrescente).
     def process_query(self, query):
-        tokens = self.tokenize(query)
-        ast = self.parse(tokens)
-        result_docs = self.evaluate(ast)
-        ranked_results = self.rank_results(result_docs, query)
+        tokens = self._tokenize(query)
+        ast = self._parse(tokens)
+        result_docs = self._evaluate(ast)
+        ranked_results = self._rank_results(result_docs, query)
         return ranked_results
 
-    def tokenize(self, query):
+    # Transforma os termos e conectores logicos da query em tokens cada
+    def _tokenize(self, query):
         pattern = r'\(|\)|AND|OR|[a-zA-Z0-9]+'
         tokens = re.findall(pattern, query)
         return tokens
 
+    # Representacao do no da arvore de parse
     class Node:
         def __init__(self, value, left=None, right=None):
             self.value = value
             self.left = left
             self.right = right
 
-    def parse(self, tokens):
+    # Monta a arvore de parse
+    def _parse(self, tokens):
         def precedence(op):
             return 2 if op == "AND" else 1
 
@@ -50,7 +54,7 @@ class Retriever:
                     right = output.pop()
                     left = output.pop()
                     output.append(self.Node(op, left, right))
-                operators.pop()  # remove '('
+                operators.pop()
 
         while operators:
             op = operators.pop()
@@ -60,7 +64,8 @@ class Retriever:
 
         return output[0] if output else None
 
-    def evaluate(self, node):
+    # Percorre a arvore de parse fazendo a uniao/intersecao das noticias com base nos conectores logicos.
+    def _evaluate(self, node):
         if node is None:
             return {}
 
@@ -72,9 +77,9 @@ class Retriever:
                 
             return results
 
-        # Caso recursivo: operador booleano
-        left_results = self.evaluate(node.left)
-        right_results = self.evaluate(node.right)
+        # Caso recursivo: operador booleano.
+        left_results = self._evaluate(node.left)
+        right_results = self._evaluate(node.right)
 
         if node.value == "AND":
             return {
@@ -88,8 +93,8 @@ class Retriever:
                 union[doc] = union.get(doc, 0) + freq
             return union
 
-
-    def rank_results(self, results, query):
+    # Calcula o score de cada noticia e retorna os dados pre-formatos a serem usados pelo frontend.
+    def _rank_results(self, results, query):
         if not results:
             return []
 
@@ -132,7 +137,6 @@ class Retriever:
         # Ordena por score médio (decrescente)
         ranked_docs = sorted(scores.items(), key=lambda x: x[1][0], reverse=True)
 
-        # Gera snippets
         final_results = []
         for doc, (score, best_term) in ranked_docs:
             (snippet, title) = self._generate_snippet(doc, best_term)
@@ -141,7 +145,7 @@ class Retriever:
         return final_results
 
 
-
+    # Gera o snippet com base nas restricoes do trabalho, usando o termo mais importante informado
     def _generate_snippet(self, filename, term):
         try:
             path = f"{self.data_folder}/{filename}"

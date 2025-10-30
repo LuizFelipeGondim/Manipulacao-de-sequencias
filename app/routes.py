@@ -1,9 +1,11 @@
 from flask import Blueprint, render_template, request, url_for
 import math
+from pathlib import Path
 from .controllers import SearchController
 
 main = Blueprint("main", __name__)
 
+# Rota principal responsável por lidar com todas as requisições, página e envio de dados para o frontEnd
 @main.route("/", methods=["GET", "POST"])
 def index():
 	controller = SearchController()
@@ -47,3 +49,30 @@ def index():
 		results_on_page=results_on_page,
 		error_msg=error_msg,
 	)
+
+# Rota para exibir conteúdo completo de uma notícia, retorna erro caso a noticia nao exista.
+@main.route("/news/<filename>", methods=["GET"])
+def news(filename):
+	try:
+		file_path = Path("data") / filename
+
+		if not file_path.is_file():
+			return render_template("news.html", error_msg="Arquivo não encontrado.")
+
+		with open(file_path, "r", encoding="utf-8") as f:
+			lines = f.readlines()
+
+		if not lines:
+			return render_template("news.html", error_msg="O arquivo está vazio.")
+
+		title = lines[0].strip()
+		paragraphs = [line.strip() for line in lines[1:] if line.strip()]
+
+		if not paragraphs:
+			return render_template("news.html", error_msg="Nenhum conteúdo disponível nesta notícia.")
+
+		return render_template("news.html", title=title, paragraphs=paragraphs, filename=filename)
+
+	except Exception as e:
+		return render_template("news.html", error_msg="Ocorreu um erro interno ao processar a notícia.")
+

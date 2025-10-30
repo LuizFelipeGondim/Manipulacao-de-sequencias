@@ -1,5 +1,5 @@
-{% extends 'base.html' %} {% block title %}BBC Search{% endblock %} {% block
-content %}
+{% extends 'base.html' %} {% block title %}BBC Search{% endblock %} 
+{% block content %}
 <h1 class="inter-semi-bold main-title">BBC Search</h1>
 
 <form method="post">
@@ -28,14 +28,14 @@ content %}
 </form>
 
 {% if error_msg %}
-<span class="error-message ubuntu-medium">{{ error_msg }}</span>
+  <span class="error-message ubuntu-medium">{{ error_msg }}</span>
 {% endif %} {% if results_on_page %} {% if query %}
-<p class="result-message ubuntu-regular">Resultados para: "{{ query }}"</p>
+  <p class="result-message ubuntu-regular">Resultados para: "{{ query }}"</p>
 {% endif %}
 
-<ul class="cards">
+<div class="cards">
   {% for r in results_on_page %}
-  <li class="card-container {{ r.category }}">
+  <a href="{{ url_for('main.news', filename=r.filename) }}" class="card-container {{ r.category }}">
     {% set icon = category_icons.get(r.category) %} {% if icon %}
     <img
       src="{{ url_for('static', filename=icon) }}"
@@ -52,9 +52,9 @@ content %}
         <p class="ubuntu-regular">Nome do arquivo: {{ r.filename }}</p>
       </div>
     </div>
-  </li>
+  </a>
   {% endfor %}
-</ul>
+</div>
 
 <div class="pagination">
   {% if page > 1 %}

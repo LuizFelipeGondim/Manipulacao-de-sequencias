@@ -239,7 +239,29 @@ form .search-icon {
 
 .card-content p{
 	margin-bottom: 1rem;
-	color: var(--gray)
+	color: var(--gray);
+}
+
+.news-content {
+	margin: 2rem 0;
+	width: 100%;
+}
+
+.news-paragraph {
+	text-align: justify;
+  text-justify: inter-word;
+  line-height: 1.6;
+	margin-top: 1rem;  
+	color: var(--light-black);
+	width: 100%;
+}
+
+.return {
+  margin-bottom: 1rem;
+	background-color: var(--blue);
+	color: var(--light-gray);
+	padding: 0.5rem;
+	border-radius: 8px;
 }
 
 .archive-name {

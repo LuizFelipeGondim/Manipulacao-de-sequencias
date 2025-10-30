@@ -1,0 +1,18 @@
+{% extends 'base.html' %} 
+{% block title %}BBC Search{% endblock %} 
+{% block content %}
+  {% if error_msg %}
+    <h1 class="inter-semi-bold main-title">Nao foi possivel encontrar a noticia</h1>
+    <span class="error-message ubuntu-medium">{{ error_msg }}</span>
+  {% else %}
+    <h1 class="inter-semi-bold main-title">{{ title }}</h1>
+
+    <div class="news-content">
+      <a href="{{ url_for('main.index') }}" class="ubuntu-regular return"><- Voltar</a>
+  
+      {% for p in paragraphs %}
+        <p class="ubuntu-regular news-paragraph">{{ p }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}

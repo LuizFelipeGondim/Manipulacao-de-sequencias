@@ -1,3 +1,4 @@
 from app import create_app
 
-app = create_app() # Utilizado pela Vercel
+# Utilizado pela Vercel
+app = create_app() 

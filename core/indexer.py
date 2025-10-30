@@ -29,9 +29,6 @@ class InvertedIndex:
         for word in word_list:
             self.trie.insert_word(word, document_name)
 
-    def show_trie(self):
-        self.trie.display()
-
     def search_word(self, word):
         return self.trie.search_word(word)
     

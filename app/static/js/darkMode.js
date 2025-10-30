@@ -1,3 +1,5 @@
+// Responsável por fazer a manipulação do CSS ao alterar o switch de tema da página.
+
 const checkbox = document.getElementById("switch-checkbox");
 
 const black = "#16161D";
@@ -13,13 +15,17 @@ const resultMessages = document.querySelectorAll(".result-message");
 const cards = document.querySelectorAll(".card-container");
 const cardTitles = document.querySelectorAll(".card-title");
 const paginationText = document.querySelector(".pagination-text");
+const newsParagraphs = document.querySelectorAll(".news-paragraph");
 
 function setDarkMode() {
     document.body.style.backgroundColor = black;
 	title.style.color = lightGray;
-	search.style.backgroundColor = lightBlack;
-	search.style.color = lightGray;
-	
+    
+    if (search && search.style) {
+        search.style.backgroundColor = lightBlack;
+        search.style.color = lightGray;
+    }
+
     if (paginationText && paginationText.style) paginationText.style.color = lightGray;
 
 	if (cardTitles && cardTitles.length) {
@@ -27,6 +33,12 @@ function setDarkMode() {
             item.style.color = lightGray;
         });
     } 
+
+    if (newsParagraphs && newsParagraphs.length) {
+        newsParagraphs.forEach((item) => {
+            item.style.color = lightGray;
+        });
+    }
 
 	resultMessages.forEach((item) => {
 		item.style.color = lightGray;
@@ -46,14 +58,23 @@ function setDarkMode() {
 function setLightMode() {
     document.body.style.backgroundColor = lightGray;
     title.style.color = black;
-	search.style.backgroundColor = "white";
-	search.style.color = lightBlack;
+    
+    if (search && search.style) {
+        search.style.backgroundColor = "white";
+        search.style.color = lightBlack;
+    }
 
     if (paginationText && paginationText.style) paginationText.style.color = black;
 
 	if (cardTitles && cardTitles.length) {
         cardTitles.forEach((item) => {
             item.style.color = black;
+        });
+    }
+
+    if (newsParagraphs && newsParagraphs.length) {
+        newsParagraphs.forEach((item) => {
+            item.style.color = lightBlack;
         });
     }
 
