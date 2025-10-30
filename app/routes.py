@@ -55,6 +55,8 @@ def index():
 def news(filename):
 	try:
 		file_path = Path("data") / filename
+		query = request.args.get("q", "")
+		page = request.args.get("page", 1, type=int)
 
 		if not file_path.is_file():
 			return render_template("news.html", error_msg="Arquivo não encontrado.")
@@ -71,7 +73,14 @@ def news(filename):
 		if not paragraphs:
 			return render_template("news.html", error_msg="Nenhum conteúdo disponível nesta notícia.")
 
-		return render_template("news.html", title=title, paragraphs=paragraphs, filename=filename)
+		return render_template(
+			"news.html", 
+			title=title, 
+			paragraphs=paragraphs, 
+			filename=filename,
+			page=page,
+			query=query
+		)
 
 	except Exception as e:
 		return render_template("news.html", error_msg="Ocorreu um erro interno ao processar a notícia.")

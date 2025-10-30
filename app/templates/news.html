@@ -8,7 +8,7 @@
     <h1 class="inter-semi-bold main-title">{{ title }}</h1>
 
     <div class="news-content">
-      <a href="{{ url_for('main.index') }}" class="ubuntu-regular return"><- Voltar</a>
+      <a href="{{ url_for('main.index', page=page, q=query) }}" class="ubuntu-regular return"><- Voltar</a>
   
       {% for p in paragraphs %}
         <p class="ubuntu-regular news-paragraph">{{ p }}</p>

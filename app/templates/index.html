@@ -35,7 +35,7 @@
 
 <div class="cards">
   {% for r in results_on_page %}
-  <a href="{{ url_for('main.news', filename=r.filename) }}" class="card-container {{ r.category }}">
+  <a href="{{ url_for('main.news', filename=r.filename, page=page, q=query) }}" class="card-container {{ r.category }}">
     {% set icon = category_icons.get(r.category) %} {% if icon %}
     <img
       src="{{ url_for('static', filename=icon) }}"
