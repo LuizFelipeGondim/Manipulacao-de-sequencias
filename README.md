@@ -5,6 +5,8 @@
 ## :alien: O que é?
 Este projeto é um modelo simples de buscador que utiliza uma trie para recuperação de arquivos.
 
+Link: https://manipulacao-de-sequencias.vercel.app/
+
 ## Como posso testá-lo?:
 
 ```
