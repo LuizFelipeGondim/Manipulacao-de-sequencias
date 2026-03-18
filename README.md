@@ -7,7 +7,11 @@ Este projeto é um modelo simples de buscador que utiliza uma trie para recupera
 
 Link: https://manipulacao-de-sequencias.vercel.app/
 
-## Como posso testá-lo?:
+<strong>
+  Para consultar mais de uma palavra no buscador, utilize os operadores AND e/ou OR entre elas.
+</strong>
+
+## Como posso executá-lo na minha máquina?:
 
 ```
 - Instale a virtualenv no seu sistema: apt install python3.10-venv ✔
